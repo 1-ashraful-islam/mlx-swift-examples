@@ -35,6 +35,7 @@ struct ContentView: View {
                     Spacer()
                     if llm.running {
                         ProgressView()
+                            .frame(maxHeight: 20)
                         Spacer()
                     }
                     Picker("", selection: $selectedDisplayStyle) {
@@ -131,18 +132,18 @@ class LLMEvaluator {
 
     /// parameters controlling the output
     let temperature: Float = 0.6
-    let maxTokens = 100
+    let maxTokens = 240
 
     enum LoadState {
         case idle
-        case loaded(LLMModel, LLM.Tokenizer)
+        case loaded(LLMModel, Tokenizers.Tokenizer)
     }
 
     var loadState = LoadState.idle
 
     /// load and return the model -- can be called multiple times, subsequent calls will
     /// just return the loaded model
-    func load() async throws -> (LLMModel, LLM.Tokenizer) {
+    func load() async throws -> (LLMModel, Tokenizers.Tokenizer) {
         switch loadState {
         case .idle:
             // limit the buffer cache
